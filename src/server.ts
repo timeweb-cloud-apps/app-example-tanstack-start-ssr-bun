@@ -14,7 +14,7 @@ export default entry
 
 /*
  * После сборки этот файл становится dist/server/server.js. При запуске напрямую
- * (`node dist/server/server.js`) поднимаем HTTP-сервер: статика отдаётся из dist/client,
+ * (`bun dist/server/server.js`) поднимаем HTTP-сервер: статика отдаётся из dist/client,
  * остальные запросы уходят в SSR-обработчик. В `vite dev` и `vite preview` файл только
  * импортируется, и сервер здесь не стартует.
  *
@@ -33,4 +33,7 @@ if (isEntryPoint) {
       }),
     ],
   })
+
+  // Bun also auto-serves a default export that has fetch(); srvx already owns the port.
+  if ('Bun' in globalThis) delete (entry as { fetch?: unknown }).fetch
 }
